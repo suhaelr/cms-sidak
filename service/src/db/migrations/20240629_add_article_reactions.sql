@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS article_reactions (
+  article_slug TEXT PRIMARY KEY,
+  likes INTEGER NOT NULL DEFAULT 0,
+  dislikes INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

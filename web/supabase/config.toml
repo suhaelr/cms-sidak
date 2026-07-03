@@ -1,0 +1,14 @@
+project_id = "gumcfpldptzulikcnjah"
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]
+
+[functions.manage-users]
+verify_jwt = false
+
+[functions.import-regions]
+verify_jwt = false
+
+[functions.fetch-regions]
+verify_jwt = false

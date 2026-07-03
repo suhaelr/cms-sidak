@@ -1,0 +1,36 @@
+# sidak-bgn-web — GitLab CI (frontend Vite, build config via Vault + CI variables)
+
+include:
+  - project: 'pusdatin/sipgn-v2/gitops/ci-templates'
+    ref: development
+    file: '/templates/modules/siphr/docker-app-frontend.yml'
+
+variables:
+  CI_MODULE: sidak-bgn
+  CI_SERVICE_NAME: sidak-bgn-web
+  GITOPS_LAYOUT: bgn-digital
+  GITOPS_MANIFEST_BASE: k8s-manifest/bgn-digital
+  DOCKERFILE: Dockerfile
+  DOCKER_CONTEXT: .
+  FRONTEND_ENV_FILE: .env.production
+  FRONTEND_BUILD_ENV_VARS: >-
+    VITE_SUPABASE_PROJECT_ID,
+    VITE_SUPABASE_PUBLISHABLE_KEY,
+    VITE_SUPABASE_URL,
+    SUPABASE_ACCESS_TOKEN
+  VAULT_ENABLED: "true"
+  VAULT_ADDR: "https://vault.bgn.go.id"
+  HARBOR_HOST_ALIAS: "10.247.210.239 registry.bgn.go.id"
+  VAULT_HOST_ALIAS: "10.247.210.239 vault.bgn.go.id"
+
+prepare-build-env:
+  extends: .siphr_frontend_prepare_env
+  rules:
+    - if: $CI_COMMIT_BRANCH == "staging"
+      variables:
+        VAULT_AUTH_ROLE: gitlab-ci-sidak-bgn-staging-role
+        VAULT_KV_MOUNT: bgn-digital/staging/sidak-bgn
+    - if: $CI_COMMIT_BRANCH == "main"
+      variables:
+        VAULT_AUTH_ROLE: gitlab-ci-sidak-bgn-production-role
+        VAULT_KV_MOUNT: bgn-digital/production/sidak-bgn

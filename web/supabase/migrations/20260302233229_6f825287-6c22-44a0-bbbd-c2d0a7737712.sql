@@ -1,0 +1,2 @@
+ALTER TABLE public.regions DROP CONSTRAINT IF EXISTS regions_type_check;
+ALTER TABLE public.regions ADD CONSTRAINT regions_type_check CHECK (type = ANY (ARRAY['province'::text, 'city'::text, 'district'::text, 'village'::text]));
